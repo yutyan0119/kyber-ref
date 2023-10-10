@@ -1,0 +1,1 @@
+cargo test keypair_encap_decap_invalid_ciphertext --features "kyber1024" --  --nocapture
