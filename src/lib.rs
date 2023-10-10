@@ -119,7 +119,7 @@
 //! 
 //! * **Decapsulation** - The ciphertext was unable to be authenticated. The shared secret was not decapsulated  
 
-#![cfg_attr(not(feature ="std"), no_std)]
+// #![cfg_attr(not(feature ="std"), no_std)]
 #![allow(clippy::many_single_char_names)]
 
 // Prevent usage of mutually exclusive features

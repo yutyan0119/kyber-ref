@@ -375,6 +375,8 @@ pub(crate) fn shake256(out: &mut[u8], mut outlen: usize, input: &[u8], inlen: us
   let mut state = KeccakState::new();
   let mut idx = 0;
   shake256_absorb_once(&mut state, input, inlen);
+  // let hex_state = state.s.iter().map(|x| format!("{:016x}", x)).collect::<Vec<String>>().join("");
+  // println!("input state: {:?}", hex_state);
   let nblocks = outlen/SHAKE256_RATE;
   shake256_squeezeblocks(&mut out[idx..], nblocks, &mut state);
   outlen -= nblocks*SHAKE256_RATE;
@@ -466,10 +468,18 @@ pub(crate) fn keccak_absorb_once(
   }
 
   for i in 0..inlen {
+    // let hex_state = s.iter().map(|x| format!("{:016x}", x)).collect::<Vec<String>>().join("");
+    // println!("state: {:?}", hex_state);
     s[i/8] ^= (input[idx+i] as u64) << 8*(i%8);
   }
+  // let hex_state = s.iter().map(|x| format!("{:016x}", x)).collect::<Vec<String>>().join("");
+  // println!("end input state: {:?}", hex_state);
   s[inlen/8] ^= (p as u64) << 8*(inlen%8);
+  // let hex_state = s.iter().map(|x| format!("{:016x}", x)).collect::<Vec<String>>().join("");
+  // println!("padding 1 state: {:?}", hex_state);
   s[(r-1)/8] ^= 1u64 << 63;
+  // let hex_state = s.iter().map(|x| format!("{:016x}", x)).collect::<Vec<String>>().join("");
+  // println!("padding 2 state: {:?}", hex_state);
 }
 
 // Name:        keccak_squeeze

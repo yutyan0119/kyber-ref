@@ -157,6 +157,7 @@ fn gen_matrix(a: &mut [Polyvec], seed: &[u8], transposed: bool)
       }
       xof_squeezeblocks(&mut buf, GEN_MATRIX_NBLOCKS, &mut state);
       buflen = GEN_MATRIX_NBLOCKS*XOF_BLOCKBYTES;
+      println!("buf: {:?}\n buflen; {:?}", buf, buflen);
       ctr = rej_uniform(&mut a[i].vec[j].coeffs, KYBER_N, &buf, buflen);
 
       while ctr < KYBER_N
@@ -203,6 +204,7 @@ pub fn indcpa_keypair<R>(
   hash_g(&mut buf, &randbuf, KYBER_SYMBYTES);
 
   let (publicseed, noiseseed) = buf.split_at(KYBER_SYMBYTES);
+  println!("publicseed length {:?}\n noiseseed lenght {:?}", publicseed.len(), noiseseed.len());
   gen_a(&mut a, publicseed);
 
   for i in 0..KYBER_K {

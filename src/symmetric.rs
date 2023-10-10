@@ -164,7 +164,10 @@ fn kyber_shake128_absorb(
   extseed[..KYBER_SYMBYTES].copy_from_slice(input);
   extseed[KYBER_SYMBYTES] = x;
   extseed[KYBER_SYMBYTES+1] = y;
+  println!("shake128_absorb extseed: {:?}", extseed);
   shake128_absorb_once(s, &extseed, KYBER_SYMBYTES + 2);
+  let hex_state = s.s.iter().map(|x| format!("{:016x}", x)).collect::<Vec<String>>().join("");
+  println!("shak128 endofinput state: {:?}", hex_state);
 }
 
 // Name:        kyber_shake128_squeezeblocks

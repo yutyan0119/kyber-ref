@@ -10,51 +10,51 @@ const CT: &str = "EADD5ADA14DA57F0AEF3505F1CAA6485D4238D999A3EF4B0A59A1CDBE0A27E
 
 // Benchmarking key generation
 fn keypair(c: &mut Criterion) {
-  let mut _rng = rand::thread_rng(); //placeholder
-  let mut pk = [0u8; KYBER_PUBLICKEYBYTES];
-  let mut sk = [0u8; KYBER_SECRETKEYBYTES];
-  let bufs = Some(([1u8; 32].as_slice(), [255u8; 32].as_slice()));
-  c.bench_function("Keypair Generation", |b| {
-    b.iter(|| {
-      crypto_kem_keypair(&mut pk, &mut sk, &mut _rng, bufs).unwrap();
-    })
-  });
+    let mut _rng = rand::thread_rng(); //placeholder
+    let mut pk = [0u8; KYBER_PUBLICKEYBYTES];
+    let mut sk = [0u8; KYBER_SECRETKEYBYTES];
+    let bufs = Some(([1u8; 32].as_slice(), [255u8; 32].as_slice()));
+    c.bench_function("Keypair Generation", |b| {
+        b.iter(|| {
+            crypto_kem_keypair(&mut pk, &mut sk, &mut _rng, bufs).unwrap();
+        })
+    });
 }
 
 // Encapsulating a single public key
 fn encap(c: &mut Criterion) {
-  let mut ct = [0u8; KYBER_CIPHERTEXTBYTES];
-  let mut ss = [0u8; KYBER_SSBYTES];
-  let pk = crate::decode_hex(PK);
-  let mut _rng = rand::thread_rng();
-  let encap_buf = Some([255u8; 32].as_slice());
-  c.bench_function("Encapsulate", |b| {
-    b.iter(|| {
-      crypto_kem_enc(&mut ct, &mut ss, &pk, &mut _rng, encap_buf).unwrap();
-    })
-  });
+    let mut ct = [0u8; KYBER_CIPHERTEXTBYTES];
+    let mut ss = [0u8; KYBER_SSBYTES];
+    let pk = crate::decode_hex(PK);
+    let mut _rng = rand::thread_rng();
+    let encap_buf = Some([255u8; 32].as_slice());
+    c.bench_function("Encapsulate", |b| {
+        b.iter(|| {
+            crypto_kem_enc(&mut ct, &mut ss, &pk, &mut _rng, encap_buf).unwrap();
+        })
+    });
 }
 
 // Decapsulating a single correct ciphertext
 fn decap(c: &mut Criterion) {
-  let sk = decode_hex(SK);
-  let ct = decode_hex(CT);
-  c.bench_function("Decapsulate", |b| {
-    b.iter(|| {
-      let _dec = decapsulate(&ct, &sk);
-    })
-  });
+    let sk = decode_hex(SK);
+    let ct = decode_hex(CT);
+    c.bench_function("Decapsulate", |b| {
+        b.iter(|| {
+            let _dec = decapsulate(&ct, &sk);
+        })
+    });
 }
 
 // Decapsulating a single incorrect ciphertext
 fn decap_fail(c: &mut Criterion) {
-  let sk = decode_hex(BAD_SK);
-  let ct = decode_hex(CT);
-  c.bench_function("Decapsulate Failure", |b| {
-    b.iter(|| {
-      let _dec = decapsulate(&ct, &sk);
-    })
-  });
+    let sk = decode_hex(BAD_SK);
+    let ct = decode_hex(CT);
+    c.bench_function("Decapsulate Failure", |b| {
+        b.iter(|| {
+            let _dec = decapsulate(&ct, &sk);
+        })
+    });
 }
 
 criterion_group!(benches, keypair, encap, decap, decap_fail);
@@ -62,8 +62,8 @@ criterion_main!(benches);
 
 // Decodes a hex string into a vector of bytes
 pub fn decode_hex(s: &str) -> Vec<u8> {
-  (0..s.len())
-    .step_by(2)
-    .map(|i| u8::from_str_radix(&s[i..i + 2], 16).expect("Hex string decoding"))
-    .collect::<Vec<u8>>()
+    (0..s.len())
+        .step_by(2)
+        .map(|i| u8::from_str_radix(&s[i..i + 2], 16).expect("Hex string decoding"))
+        .collect::<Vec<u8>>()
 }
